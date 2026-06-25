@@ -7,7 +7,7 @@ from .forms import TaskModelForm
 
 
 class IndexView(TemplateView):
-    template_name = 'index.html'
+    template_name = 'taskman/index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -16,7 +16,7 @@ class IndexView(TemplateView):
 
 
 class TaskDetailView(TemplateView):
-    template_name = 'task_detail.html'
+    template_name = 'taskman/task_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -27,19 +27,19 @@ class TaskDetailView(TemplateView):
 class TaskCreateView(CreateView):
     model = Task
     form_class = TaskModelForm
-    template_name = 'task_create.html'
-    success_url = reverse_lazy('index')
+    template_name = 'taskman/task_create.html'
+    success_url = reverse_lazy('taskman:task_list')
 
 
 class TaskUpdateView(UpdateView):
     model = Task
     form_class = TaskModelForm
-    template_name = 'task_update.html'
-    success_url = reverse_lazy('index')
+    template_name = 'taskman/task_update.html'
+    success_url = reverse_lazy('taskman:task_list')
 
 
 class TaskDeleteView(View):
-    template_name = 'task_delete.html'
+    template_name = 'taskman/task_delete.html'
 
     def get(self, request, *args, **kwargs):
         task = get_object_or_404(Task, pk=kwargs['pk'])
@@ -48,7 +48,7 @@ class TaskDeleteView(View):
     def post(self, request, *args, **kwargs):
         task = get_object_or_404(Task, pk=kwargs['pk'])
         task.delete()
-        return redirect('index')
+        return redirect('taskman:task_list')
 
 
 # Create your views here.

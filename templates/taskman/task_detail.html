@@ -12,7 +12,7 @@
 <p>{{ task.description|linebreaks|default:"Нет описания" }}</p>
 <p><strong>Создано:</strong> {{ task.created|date:"d.m.Y H:i" }}</p>
 <p><strong>Обновлено:</strong> {{ task.updated|date:"d.m.Y H:i" }}</p>
-<a href="{% url 'task_update' task.pk %}" class="btn">Редактировать</a>
-<a href="{% url 'task_delete' task.pk %}" class="btn btn-danger">Удалить</a>
-<a href="{% url 'task_list' %}" class="btn">Назад к списку</a>
+<a href="{% url 'taskman:task_update' task.pk %}" class="btn">Редактировать</a>
+<a href="{% url 'taskman:task_delete' task.pk %}" class="btn btn-danger">Удалить</a>
+<a href="{% url 'taskman:task_list' %}" class="btn">Назад к списку</a>
 {% endblock %}

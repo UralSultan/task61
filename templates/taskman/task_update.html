@@ -8,6 +8,6 @@
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn">Сохранить</button>
-    <a href="{% url 'task_detail' task.pk %}" class="btn">Отмена</a>
+    <a href="{% url 'taskman:task_detail' task.pk %}" class="btn">Отмена</a>
 </form>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block nav %}
-    <a class="nav-link" href="{% url 'task_create' %}">Добавить задачу</a>
+    <a class="nav-link" href="{% url 'taskman:task_create' %}">Добавить задачу</a>
 {% endblock %}
 {% block title %}Список задач{% endblock %}
 
@@ -19,9 +19,9 @@
             {% endfor %}
         </p>
         <p><strong>Создано:</strong> {{ task.created|date:"d.m.Y H:i" }}</p>
-        <a href="{% url 'task_detail' task.pk %}" class="btn">Просмотр</a>
-        <a href="{% url 'task_update' task.pk %}" class="btn">Редактировать</a>
-        <a href="{% url 'task_delete' task.pk %}" class="btn btn-danger">Удалить</a>
+        <a href="{% url 'taskman:task_detail' task.pk %}" class="btn">Просмотр</a>
+        <a href="{% url 'taskman:task_update' task.pk %}" class="btn">Редактировать</a>
+        <a href="{% url 'taskman:task_delete' task.pk %}" class="btn btn-danger">Удалить</a>
     </li>
     {% empty %}
     <p>Задач пока нет</p>
