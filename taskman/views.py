@@ -16,7 +16,7 @@ class IndexView(TemplateView):
         return context
 
 
-class TaskDetailView(LoginRequiredMixin, TemplateView):
+class TaskDetailView(TemplateView):
     template_name = 'taskman/task_detail.html'
 
     def get_context_data(self, **kwargs):
@@ -25,17 +25,11 @@ class TaskDetailView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class TaskCreateView(CreateView):
+class TaskCreateView(LoginRequiredMixin, CreateView):
     model = Task
     form_class = TaskModelForm
     template_name = 'taskman/task_create.html'
     success_url = reverse_lazy('taskman:task_list')
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('accounts:login')
-
 
 class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Task

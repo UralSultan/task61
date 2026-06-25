@@ -8,6 +8,9 @@
         <h1>Вход</h1>
         <form action="{% url 'accounts:login' %}" method="post" class="text-center">
             {% csrf_token %}
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
             {% if has_error %}
                 <p class="form-error">Неверное имя пользователя или пароль.</p>
             {% endif %}
