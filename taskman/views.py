@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 from .models import Task
 from .forms import TaskModelForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class IndexView(TemplateView):
@@ -15,7 +16,7 @@ class IndexView(TemplateView):
         return context
 
 
-class TaskDetailView(TemplateView):
+class TaskDetailView(LoginRequiredMixin, TemplateView):
     template_name = 'taskman/task_detail.html'
 
     def get_context_data(self, **kwargs):
@@ -30,15 +31,20 @@ class TaskCreateView(CreateView):
     template_name = 'taskman/task_create.html'
     success_url = reverse_lazy('taskman:task_list')
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('accounts:login')
 
-class TaskUpdateView(UpdateView):
+
+class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Task
     form_class = TaskModelForm
     template_name = 'taskman/task_update.html'
     success_url = reverse_lazy('taskman:task_list')
 
 
-class TaskDeleteView(View):
+class TaskDeleteView(LoginRequiredMixin, View):
     template_name = 'taskman/task_delete.html'
 
     def get(self, request, *args, **kwargs):
