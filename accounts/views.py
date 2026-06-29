@@ -1,5 +1,7 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.shortcuts import render, redirect
+from django.conf import settings
+from django.contrib.auth.views import LoginView
+from django.shortcuts import render, redirect, resolve_url
 from django.urls import reverse
 from django.views.generic import CreateView
 from .forms import MyUserCreationForm
@@ -21,6 +23,16 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('taskman:task_list')
+
+
+class MyLoginView(LoginView):
+    template_name = 'accounts/login.html'
+
+    def get_success_url(self):
+        redirect_to = self.get_redirect_url()
+        if redirect_to in (reverse('accounts:login'), reverse('accounts:create')):
+            return resolve_url(settings.LOGIN_REDIRECT_URL)
+        return redirect_to or resolve_url(settings.LOGIN_REDIRECT_URL)
 
 
 # def register_view(request, *args, **kwargs):
@@ -51,5 +63,5 @@ class RegisterView(CreateView):
         if not next_url:
             next_url = self.request.POST.get('next')
         if not next_url:
-            next_url = reverse('index')
+            next_url = reverse('taskman:task_list')
         return next_url

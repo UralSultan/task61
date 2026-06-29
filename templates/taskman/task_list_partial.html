@@ -1,0 +1,29 @@
+<ul class="task-list">
+    {% for task in tasks %}
+    <li class="task-item">
+        <h3>{{ task.summary }}</h3>
+        {% if task.project %}
+            <p><strong>Проект:</strong> {{ task.project }}</p>
+        {% endif %}
+        {% if task.author %}
+            <p><strong>Автор:</strong> {{ task.author }}</p>
+        {% endif %}
+        <p><strong>Статус:</strong> {{ task.status }}</p>
+        <p><strong>Тип(ы):</strong>
+            {% for t in task.type.all %}
+                {{ t }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+                -
+            {% endfor %}
+        </p>
+        <p><strong>Создано:</strong> {{ task.created|date:"d.m.Y H:i" }}</p>
+        <a href="{% url 'taskman:task_detail' task.pk %}" class="btn">Просмотр</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'taskman:task_update' task.pk %}" class="btn">Редактировать</a>
+            <a href="{% url 'taskman:task_delete' task.pk %}" class="btn btn-danger">Удалить</a>
+        {% endif %}
+    </li>
+    {% empty %}
+    <p>Задач пока нет</p>
+    {% endfor %}
+</ul>
