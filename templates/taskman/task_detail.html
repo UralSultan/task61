@@ -18,8 +18,10 @@
 <p>{{ task.description|linebreaks|default:"Нет описания" }}</p>
 <p><strong>Создано:</strong> {{ task.created|date:"d.m.Y H:i" }}</p>
 <p><strong>Обновлено:</strong> {{ task.updated|date:"d.m.Y H:i" }}</p>
-{% if request.user.is_authenticated %}
+{% if can_update_task %}
     <a href="{% url 'taskman:task_update' task.pk %}" class="btn">Редактировать</a>
+{% endif %}
+{% if can_delete_task %}
     <a href="{% url 'taskman:task_delete' task.pk %}" class="btn btn-danger">Удалить</a>
 {% endif %}
 {% if task.project %}
