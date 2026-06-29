@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Пользователи проекта{% endblock %}
+
+{% block content %}
+<h2>Пользователи проекта: {{ project.title }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">Сохранить</button>
+</form>
+
+<a href="{% url 'taskman:project_detail' project.pk %}">Назад к проекту</a>
+{% endblock %}

@@ -9,13 +9,32 @@
 <p><strong>Описание:</strong></p>
 <p>{{ project.description|linebreaks }}</p>
 
-{% if request.user.is_authenticated %}
+{% if can_update_project %}
     <a href="{% url 'taskman:project_update' project.pk %}" class="btn">Редактировать проект</a>
+{% endif %}
+{% if can_delete_project %}
     <a href="{% url 'taskman:project_delete' project.pk %}" class="btn btn-danger">Удалить проект</a>
+{% endif %}
+{% if can_create_task %}
     <a href="{% url 'taskman:task_create' project.pk %}" class="btn">Создать задачу</a>
 {% endif %}
 <a href="{% url 'taskman:task_list' %}" class="btn">Назад к проектам</a>
 
 <h3 class="mt-4">Задачи проекта</h3>
+<h3>Пользователи проекта</h3>
+{% if project.users.all %}
+    <ul>
+        {% for user in project.users.all %}
+            <li>{{ user.username }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Пользователи пока не добавлены.</p>
+{% endif %}
+{% if can_manage_project_users %}
+    <a href="{% url 'taskman:project_users_update' project.pk %}" class="btn">
+        Управлять пользователями проекта
+    </a>
+{% endif %}
 {% include 'taskman/task_list_partial.html' %}
 {% endblock %}
