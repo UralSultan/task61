@@ -1,6 +1,6 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.shortcuts import render, redirect
-
+from .forms import MyUserCreationForm
 
 def login_view(request):
     context = {}
@@ -20,4 +20,14 @@ def logout_view(request):
     return redirect('taskman:task_list')
 
 
+def register_view(request, *args, **kwargs):
+    if request.method == 'POST':
+        form = MyUserCreationForm(data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('taskman:task_list')
 
+    else:
+        form = MyUserCreationForm()
+    return render(request, 'accounts/user_create.html', context={'form': form})
