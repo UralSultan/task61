@@ -4,6 +4,12 @@
 
 {% block content %}
 <h2>{{ task.summary }}</h2>
+{% if task.project %}
+    <p><strong>Проект:</strong> {{ task.project }}</p>
+{% endif %}
+{% if task.author %}
+    <p><strong>Автор:</strong> {{ task.author }}</p>
+{% endif %}
 <p><strong>Статус:</strong> {{ task.status }}</p>
 <p><strong>Тип(ы):</strong>
 {% for t in task.type.all %}{{ t }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}
@@ -12,7 +18,13 @@
 <p>{{ task.description|linebreaks|default:"Нет описания" }}</p>
 <p><strong>Создано:</strong> {{ task.created|date:"d.m.Y H:i" }}</p>
 <p><strong>Обновлено:</strong> {{ task.updated|date:"d.m.Y H:i" }}</p>
-<a href="{% url 'taskman:task_update' task.pk %}" class="btn">Редактировать</a>
-<a href="{% url 'taskman:task_delete' task.pk %}" class="btn btn-danger">Удалить</a>
-<a href="{% url 'taskman:task_list' %}" class="btn">Назад к списку</a>
+{% if request.user.is_authenticated %}
+    <a href="{% url 'taskman:task_update' task.pk %}" class="btn">Редактировать</a>
+    <a href="{% url 'taskman:task_delete' task.pk %}" class="btn btn-danger">Удалить</a>
+{% endif %}
+{% if task.project %}
+    <a href="{% url 'taskman:project_detail' task.project.pk %}" class="btn">Назад к проекту</a>
+{% else %}
+    <a href="{% url 'taskman:task_list_all' %}" class="btn">Назад к списку</a>
+{% endif %}
 {% endblock %}
