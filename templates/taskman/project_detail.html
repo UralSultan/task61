@@ -17,5 +17,20 @@
 <a href="{% url 'taskman:task_list' %}" class="btn">Назад к проектам</a>
 
 <h3 class="mt-4">Задачи проекта</h3>
+<h3>Пользователи проекта</h3>
+{% if project.users.all %}
+    <ul>
+        {% for user in project.users.all %}
+            <li>{{ user.username }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Пользователи пока не добавлены.</p>
+{% endif %}
+{% if request.user.is_authenticated %}
+    <a href="{% url 'taskman:project_users_update' project.pk %}" class="btn">
+        Управлять пользователями проекта
+    </a>
+{% endif %}
 {% include 'taskman/task_list_partial.html' %}
 {% endblock %}

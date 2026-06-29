@@ -3,8 +3,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
-
-from .forms import ProjectModelForm, TaskModelForm
+from .forms import ProjectModelForm, TaskModelForm, ProjectUsersForm
 from .models import Project, Task
 
 
@@ -60,6 +59,15 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('taskman:task_list')
 
 
+class ProjectUsersUpdateView(LoginRequiredMixin, UpdateView):
+    model = Project
+    form_class = ProjectUsersForm
+    template_name = 'taskman/project_users_update.html'
+
+    def get_success_url(self):
+        return reverse('taskman:project_detail', kwargs={'pk': self.object.pk})
+
+
 class TaskListView(ListView):
     model = Task
     template_name = 'taskman/task_list.html'
@@ -89,8 +97,6 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        if self.project:
-            form.instance.project = self.project
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

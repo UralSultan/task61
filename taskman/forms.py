@@ -1,6 +1,7 @@
 from django import forms
 from .models import Project, Task
 from .validators import validate_no_ban_words, validate_summary_length
+from django.contrib.auth.models import User
 
 
 class ProjectModelForm(forms.ModelForm):
@@ -32,3 +33,12 @@ class TaskModelForm(forms.ModelForm):
         description = self.cleaned_data.get('description') or ''
         validate_no_ban_words(description)
         return description
+
+
+class ProjectUsersForm(forms.ModelForm):
+    users = forms.ModelMultipleChoiceField(queryset=User.objects.all(),widget=forms.CheckboxSelectMultiple,
+                                           required=False,label='Пользователи проекта')
+
+    class Meta:
+        model = Project
+        fields = ['users']
